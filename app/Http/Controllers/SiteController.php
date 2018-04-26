@@ -6,6 +6,7 @@ use App\Host;
 use App\Site;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SiteController extends Controller
@@ -52,17 +53,18 @@ class SiteController extends Controller
         if (isset($post['name']) && $post['name']) {
             DB::beginTransaction();
             try {
+                $post['user_id'] = Auth::user()->id;
                 Site::create($post);
                 foreach ($host as $value) {
                     Host::create(['host'=>$value]);
                 }
             } catch (Exception $exception) {
                 DB::rollBack();
-                return redirect()->route('home');
+                return redirect()->route('adminSiteIndex');
             }
             DB::commit();
         }
-        return redirect()->route('home');
+        return redirect()->route('adminSiteIndex');
     }
 
     /**

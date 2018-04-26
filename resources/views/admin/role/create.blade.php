@@ -8,11 +8,13 @@
             </div>
             <div class="col-md-9">
                 <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href="{{ route('adminRoleIndex') }}" class="btn btn-primary">{{ __('角色列表') }}</a>
+                    </div>
+                </div>
+                <div class="panel panel-default">
                     <div class="panel-heading">{{ __('添加角色') }}</div>
                     <div class="panel-body">
-                        <div>
-                            <a href="{{ route('adminRoleIndex') }}">{{ __('角色列表') }}</a>
-                        </div>
                         <form action="{{ route('adminRoleStore') }}" class="form" method="post">
                             {{ csrf_field() }}
                             <div class="form-group">

@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\DB;
 class Site extends Model
 {
     protected $fillable = [
-        'name'
+        'name',
+        'user_id'
     ];
 
     /**

@@ -8,11 +8,13 @@
             </div>
             <div class="col-md-9">
                 <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href="{{ route('adminUserIndex') }}" class="btn btn-primary">{{ __('用户列表') }}</a>
+                    </div>
+                </div>
+                <div class="panel panel-default">
                     <div class="panel-heading">{{ __('添加用户') }}</div>
                     <div class="panel-body">
-                        <div>
-                            <a href="{{ route('adminUserIndex') }}">{{ __('用户列表') }}</a>
-                        </div>
                         <div>
                             <form action="{{ route('adminUserStore') }}" class="form" method="post">
                                 {{ csrf_field() }}

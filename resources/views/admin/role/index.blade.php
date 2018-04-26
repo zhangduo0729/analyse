@@ -8,11 +8,13 @@
             </div>
             <div class="col-md-9">
                 <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href="{{ route('adminRoleCreate') }}" class="btn btn-success">{{ __('添加角色') }}</a>
+                    </div>
+                </div>
+                <div class="panel panel-default">
                     <div class="panel-heading">{{ __('角色管理') }}</div>
                     <div class="panel-body">
-                        <div>
-                            <a href="{{ route('adminRoleCreate') }}">{{ __('添加角色') }}</a>
-                        </div>
                         <table class="table">
                             <tr>
                                 <th>{{ __('角色名称') }}</th>
