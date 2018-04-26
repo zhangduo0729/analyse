@@ -17,7 +17,10 @@ class SiteController extends Controller
      */
     public function index()
     {
-
+        $sites = Site::paginate(15);
+        return view('admin.site.index', [
+            'sites'=> $sites
+        ]);
     }
 
     /**
@@ -105,5 +108,16 @@ class SiteController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * 查看跟踪脚本
+     */
+    public function script($id)
+    {
+        $site = Site::find($id);
+        return view('admin.site.script', [
+            'site'=> $site
+        ]);
     }
 }

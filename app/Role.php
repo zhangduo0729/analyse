@@ -2,38 +2,15 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Role extends Model
 {
-    use Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * 更新用户的角色信息
-     * @param array $roles 数组，所有的角色id数据
-     * @return bool 是否更新成功
-     */
-    public function updateRole(array $roles)
+    public function updatePermission(array $permissions)
     {
         $user_id = $this->id;
         $user_roles = UserRole::where('user_id', $user_id)->get();

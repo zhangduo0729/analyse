@@ -4,10 +4,10 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">{{ __('站点列表') }}</div>
-                <div class="card-body">
-                    <div><a href="{{ url('/sites/create') }}">{{ __('添加一个新站点') }}</a></div>
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ __('站点列表') }}</div>
+                <div class="panel-body">
+                    <div><a href="{{ route('adminSiteCreate') }}">{{ __('添加一个新站点') }}</a></div>
                     <table class="table table-hover">
                         <tr>
                             <th>{{ __('名称') }}</th>

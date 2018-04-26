@@ -85,7 +85,7 @@ class CollectController extends Controller
             'action_id'=> $action_id,
             'access_client_id'=> $access_client_id,
             'request_time'=> $request->server->get('REQUEST_TIME'),
-            'referrer'=>$param['referrer']
+            'referrer'=>$param['referrer'] || ''
         ];
         AccessLog::create($access_log);
         $cookie = Cookie('access_client_id', $access_client_id);

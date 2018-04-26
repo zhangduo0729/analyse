@@ -11,19 +11,38 @@
 |
 */
 Route::get('/', function () {
-    return redirect('/login');
+    return redirect()->route('adminAdminIndex');
 });
-Auth::routes();
-Route::get('/admin', 'AdminController@index')->name('home');
 
 Auth::routes();
 
-Route::get('/settings', 'SettingController@index')->name('settings');
+Route::get('/collect', 'CollectController@index')->name('adminCollectIndex');
 
-Route::get('/sites/create', 'SiteController@create');
-Route::post('/sites', 'SIteController@store');
+// 后台路由
+Route::group(['prefix'=> '/admin','middleware'=>['auth']], function () {
+    Route::get('/', 'AdminController@index')->name('adminAdminIndex');
 
-Route::get('/collect', 'CollectController@index');
+    Route::get('/settings', 'SettingController@index')->name('adminSettingIndex');
 
-Route::get('/users', 'UserController@index');
+    Route::get('/report', 'ReportController@index')->name('adminReportIndex');
+
+    Route::get('/sites/create', 'SiteController@create')->name('adminSiteCreate');
+    Route::post('/sites', 'SiteController@store')->name('adminSiteStore');
+    Route::get('/sites', 'SiteController@index')->name('adminSiteIndex');
+    Route::get('/sites/{id}/script', 'SiteController@script')->name('adminSiteScript');
+
+    Route::get('/users', 'UserController@index')->name('adminUserIndex');
+    Route::delete('/users/{id}', 'UserController@destroy')->name('adminUserDestroy');
+    Route::get('/users/create', 'UserController@create')->name('adminUserCreate');
+    Route::post('/users', 'UserController@store')->name('adminUserStore');
+    Route::delete('/users/{id}', 'UserController@destroy')->name('adminUserDestroy');
+    Route::get('/users/{id}/editrole', 'UserController@editRole')->name('adminUserEditRole');
+    Route::post('/users/{id}/updaterole', 'UserController@updateRole')->name('adminUserUpdateRole');
+
+    Route::get('/roles', 'RoleController@index')->name('adminRoleIndex');
+    Route::get('/roles/create', 'RoleController@create')->name('adminRoleCreate');
+    Route::post('/roles', 'RoleController@store')->name('adminRoleStore');
+    Route::delete('/roles/{id}', 'RoleController@destroy')->name('adminRoleDestroy');
+    Route::get('/roles/{id}/editpermission', 'RoleController@editPermission')->name('adminRoleEditPermission');
+});
 
