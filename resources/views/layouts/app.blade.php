@@ -89,14 +89,22 @@
         }
     </script>
     {{--埋点脚本--}}
-    <script type="text/javascript">
-        var _maq = _maq || [];
-        _maq.push(["site_id", 1]);
-        (function() {
-            var ma = document.createElement("script"); ma.type = "text/javascript"; ma.async = true;
-            ma.src = "http://localhost:8000/analyse.js";
-            var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ma, s);
-        })();
-    </script>
+	<script type="text/javascript">
+    var _maq = _maq || [];
+    _maq.push(["site_id", 1]);
+    (function() {
+        var ma = document.createElement("script"); ma.type = "text/javascript"; ma.async = true;
+        ma.src = "http://iian.xyz/analyse.js";
+        var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ma, s);
+    })();
+</script>
+
+
+
+
+
+
+
+
 </body>
 </html>

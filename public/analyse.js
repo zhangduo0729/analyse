@@ -35,5 +35,5 @@
 
     //通过Image对象请求后端脚本
     var img = new Image(1, 1);
-    img.src = 'http://localhost:8000/collect?' + args;
+    img.src = 'http://iian.xyz/collect?' + args;
 })();
