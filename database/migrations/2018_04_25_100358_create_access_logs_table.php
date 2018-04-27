@@ -22,6 +22,9 @@ class CreateAccessLogsTable extends Migration
             $table->bigInteger('request_time');
             $table->text('referrer');
             $table->string('session_id');
+            $table->string('country', 50);
+            $table->string('province', 50);
+            $table->string('city', 50);
             $table->timestamps();
         });
     }
