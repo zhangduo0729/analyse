@@ -73,7 +73,6 @@ class CollectController extends Controller
         $ip = $request->getClientIp();
         $ipInstance = new Ip('ali');
         $addr = $ipInstance->ip2addr($ip);
-//        dd($ip);
 
         // 最后准备加入日志文件的内容
         $access_log = [

@@ -12,7 +12,7 @@ class Ali
         $result = json_decode($result, JSON_UNESCAPED_UNICODE);
         return [
             'country'=>isset($result['data']['country']) ?: '',
-            'region'=>isset($result['data']['province']) ?: '',
+            'province'=>isset($result['data']['province']) ?: '',
             'city'=>isset($result['data']['city']) ?: ''
         ];
     }
