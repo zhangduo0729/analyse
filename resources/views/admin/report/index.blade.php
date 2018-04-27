@@ -10,7 +10,12 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ __('报表面板') }}</div>
                     <div class="panel-body">
-                        dasfsdfasd
+                        <div class="row">
+                            <div class="col-md-6">
+                                @include('admin.report.plugins.overview')
+                            </div>
+                            <div class="col-md-6">sd</div>
+                        </div>
                     </div>
                 </div>
             </div>

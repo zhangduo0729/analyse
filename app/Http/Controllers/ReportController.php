@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AccessLog;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -12,6 +13,13 @@ class ReportController extends Controller
      */
     public function index()
     {
-        return view('admin.report.index');
+        // 访问次数
+        return view('admin.report.index', [
+            'clicksCount'=>AccessLog::pvCount(),
+            'uniqueVisitorsCount'=>AccessLog::uniqueVisitorsCount(),
+            'uniquePageClicksCount'=>AccessLog::uniquePageClicksCount(),
+            'visitCount'=>AccessLog::visitCount(),
+            'bounceRate'=>AccessLog::bounceRate()
+        ]);
     }
 }

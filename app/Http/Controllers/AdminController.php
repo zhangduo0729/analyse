@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\AccessLog;
 use App\Site;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {

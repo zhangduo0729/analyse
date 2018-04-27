@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Role extends Model
 {
@@ -12,31 +13,32 @@ class Role extends Model
 
     public function updatePermission(array $permissions)
     {
-        $user_id = $this->id;
-        $user_roles = UserRole::where('user_id', $user_id)->get();
+        $role_id = $this->id;
+        $role_permissions = RolePermission::where('role_id', $role_id)->get();
         DB::beginTransaction();
         try {
-            foreach ($user_roles as $user_role) {
-                if (!in_array($user_role->role_id, $roles)) {
-                    UserRole::destroy($user_role->id);
+            foreach ($role_permissions as $role_permission) {
+                if (!in_array($role_permission->role_id, $permissions)) {
+                    RolePermission::destroy($role_permission->id);
                 }
             }
-            foreach ($roles as $role_id) {
+            foreach ($permissions as $permission_id) {
                 $in = false;
-                foreach ($user_roles as $user_role) {
-                    if ($role_id === $user_role->id) {
+                foreach ($role_permissions as $role_permission) {
+                    if ($permission_id === $role_permission->id) {
                         $in = true;
                         break;
                     }
                 }
                 if (!$in) {
-                    UserRole::create([
-                        'user_id'=>$user_id,
-                        'role_id'=>$role_id[0]
+                    RolePermission::create([
+                        'role_id'=>$role_id,
+                        'permission_id'=>$permission_id[0]
                     ]);
                 }
             }
         } catch (\Exception $exception) {
+            dd($exception);
             DB::rollBack();
             return false;
         }

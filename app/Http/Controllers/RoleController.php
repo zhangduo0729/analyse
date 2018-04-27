@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Permission;
 use App\Role;
+use App\RolePermission;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -63,8 +64,17 @@ class RoleController extends Controller
     public function editPermission($id)
     {
         $permissions = Permission::all();
+        $role_permissions = RolePermission::where('role_id', $id)->get();
+        foreach ($permissions as $permission) {
+            foreach ($role_permissions as $role_permission) {
+                if ($permission->id === $role_permission->permission_id) {
+                    $permission->checked = true;
+                }
+            }
+        }
         return view('admin.role.editpermission', [
-            'permissions'=> $permissions
+            'permissions'=> $permissions,
+            'id'=>$id
         ]);
     }
 
@@ -77,6 +87,6 @@ class RoleController extends Controller
     {
         $permissions = $request->except('_token');
         Role::find($id)->updatePermission($permissions);
-        return redirect()->route('adminRoleEditPermission');
+        return redirect()->route('adminRoleEditPermission', ['id'=>$id]);
     }
 }

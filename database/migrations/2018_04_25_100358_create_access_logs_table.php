@@ -21,6 +21,7 @@ class CreateAccessLogsTable extends Migration
             $table->integer('access_client_id');
             $table->bigInteger('request_time');
             $table->text('referrer');
+            $table->string('session_id');
             $table->timestamps();
         });
     }

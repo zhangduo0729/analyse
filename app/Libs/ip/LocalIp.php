@@ -7,9 +7,9 @@
  * $addr = $ip -> ip2addr('IP地址');
  * print_r($addr);
  */
-namespace App\Libs;
+namespace App\Libs\ip;
 
-class ip {
+class LocalIp {
     var $fh; //IP数据库文件句柄
     var $first; //第一条索引
     var $last; //最后一条索引

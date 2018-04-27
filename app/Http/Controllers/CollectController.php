@@ -6,6 +6,7 @@ use App\AccessClient;
 use App\AccessLog;
 use App\Action;
 use App\Host;
+use App\Libs\ip\Ip;
 use App\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -20,22 +21,6 @@ class CollectController extends Controller
      */
     public function index(Request $request)
     {
-        /**
-         * 需要统计的数据
-         * title
-         * domain
-         * referrer
-         * screenwidth
-         * screenheight
-         * screencolorDepth
-         * lang
-         * url
-         *
-         * 请求时间
-         * useragent
-         * ip
-         * 代理地址
-         */
         $param = Input::get();
 
         // 过滤掉不包含siteId或者没有添加的站点的请求
@@ -65,6 +50,12 @@ class CollectController extends Controller
             $action_id = $action->id;
         }
 
+        // session_id用于统计会话次数，即访问次数，默认生存期三十分钟,超过三十分钟后的再次访问作为新的一次访问
+        $session_id = Cookie::get('session_id');
+        if (!$session_id) {
+            $session_id = uniqid();
+        }
+
         // 通过cookie确定client_id是否是第一次访问，如果是就添加客户端，如果不是，直接获取用户id
         $access_client_id = Cookie::get('access_client_id');
         if (!$access_client_id || !AccessClient::find($access_client_id)) {
@@ -78,19 +69,33 @@ class CollectController extends Controller
             $access_client_id = $access_client->id;
         }
 
+        // 根据ip获取地理位置
+        $ip = $request->getClientIp();
+        $ipInstance = new Ip('ali');
+        $addr = $ipInstance->ip2addr($ip);
+//        dd($ip);
+
         // 最后准备加入日志文件的内容
         $access_log = [
+            'country'=> $addr['country'],
+            'province'=> $addr['province'],
+            'city'=> $addr['city'],
             'site_id'=> $param['site_id'],
             'host_id'=> $host_id,
             'action_id'=> $action_id,
             'access_client_id'=> $access_client_id,
             'request_time'=> $request->server->get('REQUEST_TIME'),
-            'referrer'=>$param['referrer'] || ''
+            'referrer'=> $param['referrer'] || '',
+            'session_id'=> $session_id
         ];
         AccessLog::create($access_log);
-        $cookie = Cookie('access_client_id', $access_client_id);
+        $client_id_cookie = Cookie('access_client_id', $access_client_id, 365 * 2 * 24 * 60);
+        $session_id_cookie = Cookie('session_id', $session_id, 30);
 
         // 返回并写入cookie
-        return response()->json('success')->cookie($cookie);
+        return response()
+            ->json('success')
+            ->cookie($session_id_cookie)
+            ->cookie($client_id_cookie);
     }
 }

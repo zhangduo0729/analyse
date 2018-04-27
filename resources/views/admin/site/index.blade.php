@@ -8,26 +8,26 @@
             </div>
             <div class="col-md-9">
                 <div class="panel panel-default">
-                    <div class="panel-heading">{{ __('站点管理') }}</div>
                     <div class="panel-body">
-                        <div>
-                            <a href="{{ route('adminSiteCreate') }}">{{ __('添加站点') }}</a>
-                        </div>
-                        <table class="table">
-                            <tr>
-                                <th>站点名称</th>
-                                <th>操作</th>
-                            </tr>
-                            @foreach($sites as $site)
-                            <tr>
-                                <td>{{ $site->name }}</td>
-                                <td>
-                                    <a href="{{ route('adminSiteScript', ['id'=>$site->id]) }}" class="btn btn-primary btn-sm">查看跟踪代码</a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </table>
+                        <a href="{{ route('adminSiteCreate') }}" class="btn btn-primary">{{ __('添加站点') }}</a>
                     </div>
+                </div>
+                <div class="panel panel-default">
+                <div class="panel-heading">{{ __('站点管理') }}</div>
+                    <table class="table">
+                        <tr>
+                            <th>站点名称</th>
+                            <th>操作</th>
+                        </tr>
+                        @foreach($sites as $site)
+                        <tr>
+                            <td>{{ $site->name }}</td>
+                            <td>
+                                <a href="{{ route('adminSiteScript', ['id'=>$site->id]) }}" class="btn btn-primary btn-sm">查看跟踪代码</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
                 </div>
             </div>
         </div>

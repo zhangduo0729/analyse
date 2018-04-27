@@ -15,11 +15,16 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ __('分配权限') }}</div>
                     <div class="panel-body">
-                        <form action="" method="post">
+                        <form action="{{ route('adminRoleUpdatePermission', ['id'=>$id]) }}" method="post">
                             {{ csrf_field() }}
-                            @foreach($permissions as $permission)
-                            <input type="checkbox" name="permission_id[]" value="{{ $permission->id }}"> {{ $permission->remark }}
-                            @endforeach
+                            <div class="form-group">
+                                @foreach($permissions as $permission)
+                                    <input type="checkbox" name="permission_id[]" value="{{ $permission->id }}" @if($permission->checked) checked @endif> {{ $permission->remark }}
+                                @endforeach
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary">{{ __('提交') }}</button>
+                            </div>
                         </form>
                     </div>
                 </div>
