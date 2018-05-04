@@ -59,9 +59,10 @@ class RoleController extends Controller
     /**
      * 分配权限表单
      * get:/roles/{id}/editpermission
+     * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function editPermission($id)
+    public function editPermission(int $id)
     {
         $permissions = Permission::all();
         $role_permissions = RolePermission::where('role_id', $id)->get();

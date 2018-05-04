@@ -29,6 +29,20 @@ class User extends Authenticatable
     ];
 
     /**
+     * 判断用户是否是超级管理员
+     * @return boolean
+     */
+    public function isSuperAdmin()
+    {
+        $userRole = UserRole::where('user_id', $this->id)->where('role_id', 1)->first();
+        if ($userRole) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * 更新用户的角色信息
      * @param array $roles 数组，所有的角色id数据
      * @return bool 是否更新成功

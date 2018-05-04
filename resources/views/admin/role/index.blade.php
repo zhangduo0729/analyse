@@ -24,12 +24,14 @@
                                 <tr>
                                     <td>{{ $role->name }}</td>
                                     <td>
+                                        @if($role->id != 1)
                                         <a href="{{ route('adminRoleEditPermission', ['id'=>$role->id]) }}" class="btn btn-sm btn-primary">分配权限</a>
                                         <a href="javascript:;" class="btn btn-sm btn-danger" onclick="del(function () { document.getElementById('destroyRoleForm{{ $role->id }}').submit() })">删除</a>
                                         <form id="destroyRoleForm{{ $role->id }}" action="{{ route('adminRoleDestroy', ['id'=>$role->id]) }}" method="post" style="display: none;">
                                             <input type="hidden" name="_method" value="delete">
                                             {{ csrf_field() }}
                                         </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

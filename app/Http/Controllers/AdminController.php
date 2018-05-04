@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AccessLog;
+use App\Libs\Qqzeng;
 use App\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;

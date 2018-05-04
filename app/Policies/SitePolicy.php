@@ -11,6 +11,20 @@ class SitePolicy
     use HandlesAuthorization;
 
     /**
+     * 检查策略
+     * @param $user
+     * @param $ability
+     * @return boolean
+     */
+    public function before($user, $ability)
+    {
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+        return null;
+    }
+
+    /**
      * Determine whether the user can view the site.
      * 确定用户是否有权限查看站点
      * @param  \App\User  $user
@@ -54,6 +68,6 @@ class SitePolicy
      */
     public function delete(User $user, Site $site)
     {
-        //
+        return false;
     }
 }

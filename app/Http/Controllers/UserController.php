@@ -51,7 +51,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        User::create($request->except('_token'));
+        $user = $request->except('_token');
+        $user['password'] = bcrypt($user['password']);
+        User::create($user);
         return redirect()->route('adminUserIndex');
     }
 

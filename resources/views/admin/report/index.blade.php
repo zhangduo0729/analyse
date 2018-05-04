@@ -3,6 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
+            @include('admin.report.partials.condition')
             <div class="col-md-3">
                 @include('admin.report.sidebar')
             </div>
@@ -14,7 +15,9 @@
                             <div class="col-md-6">
                                 @include('admin.report.plugins.overview')
                             </div>
-                            <div class="col-md-6">sd</div>
+                            <div class="col-md-6">
+                                @include('admin.report.plugins.realtimedata')
+                            </div>
                         </div>
                     </div>
                 </div>

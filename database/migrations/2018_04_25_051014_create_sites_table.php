@@ -17,6 +17,7 @@ class CreateSitesTable extends Migration
             $table->increments('id');
             $table->string('name', 20)->unique();
             $table->integer('user_id');
+            $table->string('query', 50);
             $table->timestamps();
         });
     }

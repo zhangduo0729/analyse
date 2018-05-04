@@ -20,12 +20,16 @@ class CreateAccessLogsTable extends Migration
             $table->integer('action_id');
             $table->integer('access_client_id');
             $table->bigInteger('request_time');
+            $table->unsignedBigInteger('ip');
             $table->text('referrer');
             $table->string('session_id');
             $table->string('country', 50);
             $table->string('province', 50);
             $table->string('city', 50);
-            $table->timestamps();
+            $table->text('href');
+            $table->string('keywords', 100);
+            $table->bigInteger('created_at');
+            $table->bigInteger('updated_at');
         });
     }
 

@@ -30,6 +30,9 @@ Route::group(['prefix'=> '/admin','middleware'=>['auth']], function () {
     Route::post('/sites', 'SiteController@store')->name('adminSiteStore');
     Route::get('/sites', 'SiteController@index')->name('adminSiteIndex');
     Route::get('/sites/{id}/script', 'SiteController@script')->name('adminSiteScript');
+    Route::get('/sites/{id}/edit', 'SiteController@edit')->name('adminSiteEdit');
+    Route::put('/sites/{id}/update', 'SiteController@update')->name('adminSiteUpdate');
+    Route::delete('/sites/{id}', 'SiteController@destroy')->name('adminSiteDestroy');
 
     Route::get('/users', 'UserController@index')->name('adminUserIndex');
     Route::delete('/users/{id}', 'UserController@destroy')->name('adminUserDestroy');
@@ -45,5 +48,8 @@ Route::group(['prefix'=> '/admin','middleware'=>['auth']], function () {
     Route::delete('/roles/{id}', 'RoleController@destroy')->name('adminRoleDestroy');
     Route::get('/roles/{id}/editpermission', 'RoleController@editPermission')->name('adminRoleEditPermission');
     Route::post('/roles/{id}/updatepermission', 'RoleController@updatePermission')->name('adminRoleUpdatePermission');
+
+    Route::get('/report/clientanalyse/index', 'ClientAnalyseController@index')->name('adminClientAnalyseIndex');
+    Route::get('/report/clientanalyse/log', 'ClientAnalyseController@log')->name('adminClientLog');
 });
 

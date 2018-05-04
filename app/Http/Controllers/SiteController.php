@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AccessLog;
 use App\Host;
 use App\Site;
 use Exception;
@@ -43,33 +44,14 @@ class SiteController extends Controller
     public function store(Request $request)
     {
         $post = $request->except('_token');
-
-        // 替换换行
-        $replace = ["\r\n", "\n", "\r"];
-        $host = explode(',', str_replace($replace, ',', $post['host']));
-        unset($post['host']);
-
-        // 存入数据库
-        if (isset($post['name']) && $post['name']) {
-            DB::beginTransaction();
-            try {
-                $post['user_id'] = Auth::user()->id;
-                Site::create($post);
-                foreach ($host as $value) {
-                    Host::create(['host'=>$value]);
-                }
-            } catch (Exception $exception) {
-                DB::rollBack();
-                return redirect()->route('adminSiteIndex');
-            }
-            DB::commit();
-        }
+        $post['user_id'] = Auth::user()->id;
+        Site::createSite($post);
         return redirect()->route('adminSiteIndex');
     }
 
     /**
      * Display the specified resource.
-     *
+     * 获取详细信息 get:/sites/{id}
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -80,36 +62,59 @@ class SiteController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
+     *  更新表单 get:/sites/{id}/edit
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        $site = Site::find($id);
+        $site->host = '';
+        $hosts = Host::where('site_id', $site->id)->get();
+        foreach ($hosts as $host) {
+            $site->host .= $host->host . "\r\n";
+        }
+        return view('admin.site.edit', [
+            'site'=> $site
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
+     * 更新信息 put:/sites/{id}/update
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = $request->except('_token', '_method');
+        Site::updateSite($post, $id);
+        return redirect()->route('adminSiteIndex');
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * delete:/sites/{id}
+     * @param int $site_id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $site_id)
     {
-        //
+        if (Auth::user()->can('delete', Site::find($site_id))) {
+            DB::beginTransaction();
+            try {
+                // 获取与站点有关的host并删除
+                Host::where('site_id', $site_id)->delete();
+                // 获取site相关的访问记录
+                AccessLog::where('site_id', $site_id)->delete();
+                Site::destroy($site_id);
+            } catch (Exception $exception) {
+                DB::rollBack();
+            }
+            DB::commit();
+            return redirect()->route('adminSiteIndex');
+        }
     }
 
     /**

@@ -18,6 +18,7 @@ class CollectController extends Controller
      * 用于收集站点的访问信息并记录进数据库
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function index(Request $request)
     {
@@ -25,13 +26,15 @@ class CollectController extends Controller
 
         // 过滤掉不包含siteId或者没有添加的站点的请求
         if (!isset($param['site_id']) || !Site::find($param['site_id'])) {
+
+            dd($param);
             return response()->json('failed');
         }
 
         $url_arr = parse_url($param['href']);
         // host_id
-        $host = $url_arr['scheme'] . '://'. $url_arr['host'];
-        $host = Host::where('host', '=', $host)->first();
+        $host = $url_arr['host'];
+        $host = Host::where('host', $host)->first();
         if (!$host) {
             return response()->json('failed');
         }
@@ -60,7 +63,6 @@ class CollectController extends Controller
         $access_client_id = Cookie::get('access_client_id');
         if (!$access_client_id || !AccessClient::find($access_client_id)) {
             $access_client = [
-                'ip'=> $request->getClientIp(),
                 'proxy'=>$request->server->get('REMOTE_ADDR'),
                 'agent'=>$request->headers->get('user-agent'),
                 'lang'=>$param['lang']
@@ -76,6 +78,8 @@ class CollectController extends Controller
 
         // 最后准备加入日志文件的内容
         $access_log = [
+            'ip'=> ip2long($request->getClientIp()),
+            'href'=> $param['href'],
             'country'=> $addr['country'],
             'province'=> $addr['province'],
             'city'=> $addr['city'],
@@ -84,9 +88,18 @@ class CollectController extends Controller
             'action_id'=> $action_id,
             'access_client_id'=> $access_client_id,
             'request_time'=> $request->server->get('REQUEST_TIME'),
-            'referrer'=> $param['referrer'] || '',
+            'referrer'=> isset($param['referrer']) ? $param['referrer'] : '',
             'session_id'=> $session_id
         ];
+        $href = $param['href'];
+        $href = new \App\Libs\UrlParser($href);
+        $query = $href->get('query');
+        $site = Site::find($param['site_id']);
+        if (is_array($query) && key_exists($site->query, $query)) {
+            $access_log['keywords'] = $query[$site->query];
+        } else {
+            $access_log['keywords'] = '';
+        }
         AccessLog::create($access_log);
         $client_id_cookie = Cookie('access_client_id', $access_client_id, 365 * 2 * 24 * 60);
         $session_id_cookie = Cookie('session_id', $session_id, 30);

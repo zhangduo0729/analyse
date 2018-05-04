@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Policies\SitePolicy;
+use App\Site;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -14,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
+        Site::class => SitePolicy::class,
     ];
 
     /**
@@ -25,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // 站点策略，确定是否有相关的权限
-//        Gate::resource('sites', 'SitePolicy');
+        // 站点模型策略，确定是否有相关的权限
+        Gate::resource('sites-list', 'SitePolicy');
     }
 }

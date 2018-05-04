@@ -9,8 +9,39 @@ class Site extends Model
 {
     protected $fillable = [
         'name',
-        'user_id'
+        'user_id',
+        'query'
     ];
+
+    /**
+     * 新建站点方法，单独写由于添加站点涉及两个表
+     * @param $site
+     */
+    public static function createSite($site)
+    {
+        $host = $site['host'];
+        unset($site['host']);
+
+        // 存入数据库
+        if (isset($site['name']) && $site['name']) {
+            $site = Site::create($site);
+            Host::createHosts($host, $site->id);
+        }
+    }
+
+    /**
+     * 更新站点信息
+     * @param $site
+     * @param $site_id
+     */
+    public static function updateSite($site, $site_id)
+    {
+        $host = $site['host'];
+        Host::where('site_id', $site_id)->delete();
+        unset($site['host']);
+        Host::createHosts($host, $site_id);
+        Site::where('id', $site_id)->update($site);
+    }
 
     /**
      * 获取站点的浏览量

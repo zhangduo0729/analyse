@@ -15,7 +15,6 @@ class CreateAccessClientsTable extends Migration
     {
         Schema::create('access_clients', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('ip');
             $table->string('proxy');
             $table->string('agent');
             $table->string('lang');
