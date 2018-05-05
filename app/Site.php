@@ -49,7 +49,16 @@ class Site extends Model
      */
     public function access_count()
     {
-        return AccessLog::where('site_id', $this->id)->count();
+        return AccessLog::visitCount(0, 0, $this->id);
+    }
+
+    /**
+     * 获取站点的浏览量pv
+     * @return int
+     */
+    public function pvCount()
+    {
+        return AccessLog::pvCount(0, 0, $this->id);
     }
 
     /**
@@ -57,7 +66,7 @@ class Site extends Model
      */
     public function access_client_count()
     {
-        return DB::select('select count(1) from (select count(1) from access_logs group by site_id,access_client_id)aa')[0]->{'count(1)'};
+        return AccessLog::uniqueVisitorsCount(0, 0, $this->id);
     }
 
     /**

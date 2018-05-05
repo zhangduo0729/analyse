@@ -26,8 +26,6 @@ class CollectController extends Controller
 
         // 过滤掉不包含siteId或者没有添加的站点的请求
         if (!isset($param['site_id']) || !Site::find($param['site_id'])) {
-
-            dd($param);
             return response()->json('failed');
         }
 
@@ -71,25 +69,22 @@ class CollectController extends Controller
             $access_client_id = $access_client->id;
         }
 
-        // 根据ip获取地理位置
-        $ip = $request->getClientIp();
-        $ipInstance = new Ip('ali');
-        $addr = $ipInstance->ip2addr($ip);
-
         // 最后准备加入日志文件的内容
         $access_log = [
             'ip'=> ip2long($request->getClientIp()),
             'href'=> $param['href'],
-            'country'=> $addr['country'],
-            'province'=> $addr['province'],
-            'city'=> $addr['city'],
+            'title'=> $param['title'],
             'site_id'=> $param['site_id'],
             'host_id'=> $host_id,
             'action_id'=> $action_id,
             'access_client_id'=> $access_client_id,
             'request_time'=> $request->server->get('REQUEST_TIME'),
             'referrer'=> isset($param['referrer']) ? $param['referrer'] : '',
-            'session_id'=> $session_id
+            'session_id'=> $session_id,
+            'useragent'=> $request->headers->get('user-agent'),
+            'width' => $param['width'],
+            'height'=> $param['height'],
+            'color_depth'=> $param['colorDepth']
         ];
         $href = $param['href'];
         $href = new \App\Libs\UrlParser($href);

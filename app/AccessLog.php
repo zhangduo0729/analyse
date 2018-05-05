@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Libs\UserAgentAnalyser;
 use Illuminate\Database\Eloquent\Model;
 
 class AccessLog extends Model
@@ -14,13 +15,64 @@ class AccessLog extends Model
         'request_time',
         'referrer',
         'session_id',
-        'country',
-        'province',
-        'city',
         'href',
         'keywords',
-        'ip'
+        'ip',
+        'title',
+        'useragent',
+        'width',
+        'height',
+        'color_depth'
     ];
+    private $userAgent;
+
+    /**
+     * 用于获取UserAgentAnalyser类的示例对象，用于解析agent使用
+     * @return UserAgentAnalyser
+     */
+    private function userAgent()
+    {
+        if (!$this->userAgent) {
+            $this->userAgent = new UserAgentAnalyser($this->useragent);
+        }
+        return $this->userAgent;
+    }
+
+    /**
+     * 获取当次访问设备的品牌
+     * @return string 品牌名称
+     */
+    public function getBrand()
+    {
+        return $this->userAgent()->getBrand();
+    }
+
+    /**
+     * 判断当次访问设备是否是移动设备
+     * @return bool
+     */
+    public function isMobile()
+    {
+        return $this->userAgent()->isMobile();
+    }
+
+    /**
+     * 判断当次访问是否是桌面软件
+     * @return bool
+     */
+    public function isDesktop()
+    {
+        return $this->userAgent()->isDesktop();
+    }
+
+    /**
+     * 判断当次访问是否是平板电脑
+     * @return bool
+     */
+    public function isTablet()
+    {
+        return $this->userAgent()->isTablet();
+    }
 
     /**
      * 获取当前时间
@@ -264,7 +316,7 @@ class AccessLog extends Model
     public static function realTimeData(int $count=10, int $site_id=0, $startTime=0, $endTime=0)
     {
         $instance = AccessLog::join('access_clients', 'access_logs.access_client_id', '=', 'access_clients.id')
-                        ->select('access_logs.created_at', 'access_logs.referrer', 'access_logs.country', 'access_logs.province', 'access_logs.city', 'access_clients.agent', 'access_logs.ip')
+                        ->select('access_logs.href', 'access_logs.title', 'access_logs.created_at', 'access_logs.referrer', 'access_clients.agent', 'access_logs.ip')
                         ->orderBy('created_at', 'desc');
         if ($site_id !== 0) {
             $instance = $instance->where('access_logs.site_id', $site_id);

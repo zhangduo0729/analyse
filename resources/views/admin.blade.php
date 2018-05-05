@@ -16,19 +16,21 @@
                 <table class="table table-hover">
                     <tr>
                         <th>{{ __('名称') }}</th>
+                        <th>{{ __('访问量') }}</th>
                         <th>{{ __('浏览量') }}</th>
                         <th>{{ __('访客数') }}</th>
                     </tr>
                     @foreach($sites as $site)
-                        <tr>
+                        <tr onclick="window.location.href='{{ route('adminReportIndex', ['site_id' => $site->id]) }}'" style="cursor:pointer;">
                             <td>{{ $site->name }}</td>
+                            <td>{{ $site->pvCount() }}</td>
                             <td>{{ $site->access_count() }}</td>
                             <td>{{ $site->access_client_count() }}</td>
                         </tr>
                     @endforeach
                     @if($sites->links())
                     <tr>
-                        <td colspan="3">{{ $sites->links() }}</td>
+                        <td colspan="4">{{ $sites->links() }}</td>
                     </tr>
                     @endif
                 </table>

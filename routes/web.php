@@ -51,5 +51,18 @@ Route::group(['prefix'=> '/admin','middleware'=>['auth']], function () {
 
     Route::get('/report/clientanalyse/index', 'ClientAnalyseController@index')->name('adminClientAnalyseIndex');
     Route::get('/report/clientanalyse/log', 'ClientAnalyseController@log')->name('adminClientLog');
+    Route::get('/report/clientanalyse/device', 'ClientAnalyseController@device')->name('adminClientDevice');
+    Route::get('/report/clientanalyse/software', 'ClientAnalyseController@software')->name('adminClientSoftware');
+
+    Route::get('/report/pageanalyse/index', 'PageAnalyseController@index')->name('adminPageAnalyseIndex');
+    Route::get('/report/pageanalyse/enterpage', 'PageAnalyseController@enterPage')->name('adminPageAnalyseEnterPage');
+    Route::get('/report/pageanalyse/quitpage', 'PageAnalyseController@quitPage')->name('adminPageAnalyseQuitPage');
+    Route::get('/report/pageanalyse/pagetitle', 'PageAnalyseController@pageTitle')->name('adminPageAnalysePageTitle');
+    Route::get('/report/pageanalyse/search', 'PageAnalyseController@search')->name('adminPageAnalyseSearch');
+    Route::get('/report/pageanalyse/leavelink', 'PageAnalyseController@leaveLink')->name('adminPageAnalyseLeaveLink');
+
+    Route::get('/report/sourceanalyse/index', 'SourceAnalyseController@index')->name('adminSourceAnalyseIndex');
+    Route::get('/report/sourceanalyse/allsources', 'SourceAnalyseController@allSources')->name('adminSourceAnalyseAllSources');
+    Route::get('/report/sourceanalyse/searchengine', 'SourceAnalyseController@searchEngine')->name('adminSourceAnalyseSearchEngine');
 });
 

@@ -7,11 +7,11 @@
         params.title = document.title || '';
     }
     // 用户屏幕数据数据
-    // if(window && window.screen) {
-    //     params.sh = window.screen.height || 0;
-    //     params.sw = window.screen.width || 0;
-    //     params.cd = window.screen.colorDepth || 0;
-    // }
+    if(window && window.screen) {
+        params.height = window.screen.height || 0;
+        params.width = window.screen.width || 0;
+        params.colorDepth = window.screen.colorDepth || 0;
+    }
     //navigator对象数据
     if(navigator) {
         params.lang = navigator.language || '';
