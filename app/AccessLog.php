@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Libs\UrlParser;
 use App\Libs\UserAgentAnalyser;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,6 +26,7 @@ class AccessLog extends Model
         'color_depth'
     ];
     private $userAgent;
+    private $urlParser;
 
     /**
      * 用于获取UserAgentAnalyser类的示例对象，用于解析agent使用
@@ -36,6 +38,45 @@ class AccessLog extends Model
             $this->userAgent = new UserAgentAnalyser($this->useragent);
         }
         return $this->userAgent;
+    }
+
+    private function urlParser()
+    {
+        if (!$this->urlParser) {
+            try {
+                $this->urlParser = new UrlParser($this->href);
+            } catch (\Exception $e) {
+                dd($e);
+            }
+        }
+        return $this->urlParser;
+    }
+
+    /**
+     * 获取当次访问的path
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getPage()
+    {
+        return $this->urlParser()->get('path');
+    }
+
+    /**
+     * 获取访问用户的浏览器信息
+     */
+    public function getBrowser()
+    {
+        return $this->userAgent()->getBrowser();
+    }
+
+    /**
+     * 获取访问客户端的操作系统信息
+     * @return string
+     */
+    public function getOS()
+    {
+        return $this->userAgent()->getOS();
     }
 
     /**

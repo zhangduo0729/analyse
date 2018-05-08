@@ -19,6 +19,7 @@ class UrlParser
      * 构造方法，穿入需要解析的url
      * UrlParser constructor.
      * @param $url string url字符串
+     * @throws \Exception
      */
     public function __construct(string $url)
     {
@@ -60,12 +61,6 @@ class UrlParser
             return $this->params[$key];
         } else {
             return '';
-//            $key = '';
-//            foreach ($this->params as $k=>$v) {
-//                $key .= $k . ',';
-//            }
-//            $key = substr($key, 0, -1);
-//            throw new \Exception('输入的键无效，可用的键包括' . $key);
         }
     }
 }

@@ -14,11 +14,12 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">操作系统版本</div>
+                                    <div class="panel-heading">操作系统</div>
                                     <div class="panel-body">
                                         <ul class="list-group">
-                                            <li class="list-group-item">ios</li>
-                                            <li class="list-group-item">windows</li>
+                                            @foreach($oses as $os=>$logs)
+                                            <li class="list-group-item">{{ $os }} {{ count($logs) }}</li>
+                                            @endforeach
                                         </ul>
                                     </div>
                                 </div>
@@ -28,8 +29,9 @@
                                     <div class="panel-heading">{{ __('浏览器') }}</div>
                                     <div class="panel-body">
                                         <ul class="list-group">
-                                            <li class="list-group-item">ios</li>
-                                            <li class="list-group-item">windows</li>
+                                            @foreach($browsers as $browser=>$logs)
+                                            <li class="list-group-item">{{ $browser }} {{ count($logs) }}</li>
+                                            @endforeach
                                         </ul>
                                     </div>
                                 </div>

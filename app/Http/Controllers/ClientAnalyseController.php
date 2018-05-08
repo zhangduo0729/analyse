@@ -98,6 +98,15 @@ class ClientAnalyseController extends Controller
      */
     public function software()
     {
-        return view('admin.clientanalyse.software');
+        $oses = $browsers = [];
+        $logs = AccessLog::all();
+        foreach ($logs as $log) {
+            $oses[$log->getOS()][] = $log;
+            $browsers[$log->getBrowser()][] = $log;
+        }
+        return view('admin.clientanalyse.software', [
+            'oses'=> $oses,
+            'browsers'=> $browsers
+        ]);
     }
 }

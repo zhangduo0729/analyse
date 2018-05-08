@@ -33,16 +33,53 @@ class UserAgentAnalyser
     }
 
     /**
+     * 获取操作系统信息
+     */
+    public function getOS()
+    {
+        if (stripos($this->params['system'], 'windows') !== false) {
+            return 'Windows';
+        } else if (stripos($this->params['system'], 'android') !== false) {
+            return 'Android';
+        } else if (stripos($this->params['system'], 'iphone os') !== false) {
+            return 'IOS';
+        } else {
+            return 'Others';
+        }
+    }
+
+    /**
+     * 获取访问客户端的浏览器信息
+     * @return string
+     */
+    public function getBrowser()
+    {
+        if (stripos($this->params['browser'], 'micromessenger') !== false) {
+            return '微信内置浏览器';
+        } else if (stripos($this->params['browser'], 'mqqbrowser') !== false) {
+            return 'QQ内置浏览器';
+        } else if (stripos($this->params['browser'], 'firefox') !== false) {
+            return 'Firefox';
+        } else if (stripos($this->params['browser'], 'chrome') !== false) {
+            return 'Chrome';
+        } else if (stripos($this->params['browser'], 'safari') !== false) {
+            return 'Safari';
+        } else {
+            return 'Others';
+        }
+    }
+
+    /**
      * 获取访问设备的品牌
      * @return string
      */
     public function getBrand()
     {
-        if (stripos($this->params['system'], 'huawei')) {
+        if (stripos($this->params['system'], 'huawei') !== false) {
             return 'HUAWEI';
-        } else if (stripos($this->params['system'], 'iphone')) {
+        } else if (stripos($this->params['system'], 'iphone') !== false) {
             return 'iPhone';
-        } else if (stripos($this->params['system'], 'oppo')) {
+        } else if (stripos($this->params['system'], 'oppo') !== false) {
             return 'OPPO';
         } else {
             return 'Others';
