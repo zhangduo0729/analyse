@@ -63,15 +63,19 @@ class InstallApp extends Command
             'db_username' => $this->ask(mb_convert_encoding('请输入用户名(默认为root)', 'gb2312', 'utf-8')) ?: 'root',
             'db_password' => $this->secret(mb_convert_encoding('请输入密码(默认为root)', 'gb2312', 'utf-8')) ?: 'root'
         ];
+        sleep(1);
 
         // 写入配置
         $this->editEnv($env);
+        sleep(1);
 
         // 生成key
         Artisan::call('key:generate');
+        sleep(1);
 
         // 运行迁移
         Artisan::call('migrate');
+        sleep(1);
 
         // 添加登录用户
         $user = new User();
@@ -79,17 +83,20 @@ class InstallApp extends Command
         $user->email = 'aaaaaa@aaa.aaa';
         $user->password = bcrypt('aaaaaa');
         $user->save();
+        sleep(1);
 
         // 创建管理员角色
         $role = new Role();
         $role->name = '管理员';
         $role->save();
+        sleep(1);
 
         // 添加用户为管理员
         $userRole = new UserRole();
         $userRole->user_id = $user->id;
         $userRole->role_id = 1;
         $userRole->save();
+        $this->info('安装成功');
     }
 
     /**

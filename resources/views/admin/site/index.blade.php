@@ -27,7 +27,9 @@
                             <td>{{ $site->name }}</td>
                             <td>
                                 <a href="{{ route('adminSiteScript', ['id'=>$site->id]) }}" class="btn btn-primary btn-sm">查看跟踪代码</a>
+                                @can('update', $site)
                                 <a href="{{ route('adminSiteEdit', ['id'=>$site->id]) }}" class="btn btn-primary btn-sm">编辑</a>
+                                @endcan
                                 @can('delete', $site)
                                 <a href="javascript:void(0)" onclick="del(function () { document.getElementById('adminSiteDestroy{{ $site->id }}').submit() })" class="btn btn-danger btn-sm">{{ __('删除') }}</a>
                                 <form action="{{ route('adminSiteDestroy', ['id'=>$site->id]) }}" method="post" style="display:none;" id="adminSiteDestroy{{ $site->id }}">

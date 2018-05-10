@@ -17,6 +17,7 @@
                                     <div>{{ __('访问时间') }} {{ $visitLog->created_at }}</div>
                                     <div>{{ __('IP') }} {{ long2ip($visitLog->ip) }}</div>
                                     <div>{{ __('地址') }} {{ $visitLog->addr() }}</div>
+                                    <div>{{ __('页面') }} {{ $visitLog->href }}</div>
                                     <div>{{ __('来源') }} {{ $visitLog->referrer ?: '直接访问' }}</div>
                                 </div>
                             </div>

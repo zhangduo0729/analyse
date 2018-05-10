@@ -7,4 +7,5 @@
         </ul>
     </li>
     <li class="list-group-item"><a href="{{ route('adminSiteIndex') }}">站点管理</a></li>
+    <li class="list-group-item"><a href="{{ route('adminSearchEngineIndex') }}">搜索引擎</a></li>
 </ul>

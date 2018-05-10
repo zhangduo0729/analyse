@@ -68,15 +68,17 @@ class SiteController extends Controller
      */
     public function edit($id)
     {
-        $site = Site::find($id);
-        $site->host = '';
-        $hosts = Host::where('site_id', $site->id)->get();
-        foreach ($hosts as $host) {
-            $site->host .= $host->host . "\r\n";
+        if (Auth::user()->can('update', Site::find($id))) {
+            $site = Site::find($id);
+            $site->host = '';
+            $hosts = Host::where('site_id', $site->id)->get();
+            foreach ($hosts as $host) {
+                $site->host .= $host->host . "\r\n";
+            }
+            return view('admin.site.edit', [
+                'site' => $site
+            ]);
         }
-        return view('admin.site.edit', [
-            'site'=> $site
-        ]);
     }
 
     /**
@@ -88,9 +90,11 @@ class SiteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $post = $request->except('_token', '_method');
-        Site::updateSite($post, $id);
-        return redirect()->route('adminSiteIndex');
+        if (Auth::user()->can('update', Site::find($id))) {
+            $post = $request->except('_token', '_method');
+            Site::updateSite($post, $id);
+            return redirect()->route('adminSiteIndex');
+        }
     }
 
     /**

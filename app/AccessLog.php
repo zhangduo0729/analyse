@@ -27,6 +27,111 @@ class AccessLog extends Model
     ];
     private $userAgent;
     private $urlParser;
+    private $Ip;
+
+    /**
+     * 获取此次访问的大洲信息
+     */
+    public function getContinent()
+    {
+        return $this->ip()->continent;
+    }
+
+    /**
+     * 获取此次访问的国家信息
+     */
+    public function getCountry()
+    {
+        return $this->ip()->country;
+    }
+
+    /**
+     * 获取此次访问的地区信息
+     */
+    public function getProvince()
+    {
+        return $this->ip()->province;
+    }
+
+    /**
+     * 获取此次访问的城市信息
+     */
+    public function getCity()
+    {
+        return $this->ip()->city;
+    }
+
+    /**
+     * 用于获取此次访问对应的ip对象
+     * @return mixed
+     */
+    private function ip()
+    {
+        if (!$this->Ip) {
+            $this->Ip = Ip::where('ip_start_num', '<=', $this->ip)->where('ip_end_num', '>=', $this->ip)->first();
+        }
+        return $this->Ip;
+    }
+
+    /**
+     * 获取来源站点
+     */
+    public function fromSite()
+    {
+        return $this->urlParser($this->referrer)->get('host');
+    }
+
+    /**
+     * 获取本次访问从某个搜索引擎跳转过来
+     */
+    public function fromEngine()
+    {
+        $engines = SearchEngine::all();
+        $domain = $this->urlParser($this->referrer)->get('host');
+        foreach($engines as $engine) {
+            if ($domain == $engine->domain) {
+                return $engine->name;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是否来自搜索引擎
+     * @param SearchEngine $engine
+    // 如果等于null，那么就是判断是否从搜索引擎跳转过来
+    // 如果不等于null，那么就是判断是否从某个搜索引擎过来
+     * @return bool
+     * @throws \Exception
+     */
+    public function isFromSearchEngine(SearchEngine $engine=null)
+    {
+        $host = $this->urlParser($this->referrer)->get('host');
+        if (!$engine) {
+            $engines = SearchEngine::all();
+            foreach ($engines as $engine) {
+                if ($engine->domain == $host) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        if ($host == $engine) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     */
+    public function isDirectView()
+    {
+        if (!$this->referrer) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 用于获取UserAgentAnalyser类的示例对象，用于解析agent使用
@@ -40,11 +145,15 @@ class AccessLog extends Model
         return $this->userAgent;
     }
 
-    private function urlParser()
+    /**
+     * 解析当次访问的href
+     * @return UrlParser
+     */
+    private function urlParser($url)
     {
         if (!$this->urlParser) {
             try {
-                $this->urlParser = new UrlParser($this->href);
+                $this->urlParser = new UrlParser($url);
             } catch (\Exception $e) {
                 dd($e);
             }
@@ -59,7 +168,7 @@ class AccessLog extends Model
      */
     public function getPage()
     {
-        return $this->urlParser()->get('path');
+        return $this->urlParser($this->href)->get('path');
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Policies\SitePolicy;
+use App\Policies\UserPolicy;
 use App\Site;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -17,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
         Site::class => SitePolicy::class,
+        User::class => UserPolicy::class
     ];
 
     /**
@@ -30,5 +32,8 @@ class AuthServiceProvider extends ServiceProvider
 
         // 站点模型策略，确定是否有相关的权限
         Gate::resource('sites-list', 'SitePolicy');
+
+        // 站点模型策略，确定是否有相关的权限
+        Gate::resource('users-list', 'UserPolicy');
     }
 }

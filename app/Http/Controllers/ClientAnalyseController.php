@@ -45,7 +45,7 @@ class ClientAnalyseController extends Controller
             $logs = $logs->where('created_at', '>=', strtotime($start_time));
         }
         if ($end_time) {
-            $logs = $logs->where('created_at', '<=', strtotime($end_time));
+            $logs = $logs->where('created_at', '<=', strtotime($end_time . ' 24:00:00'));
         }
 
         $logs = $logs
@@ -58,9 +58,20 @@ class ClientAnalyseController extends Controller
     /**
      * 按照设备来对访客进行统计
      */
-    public function device()
+    public function device(Request $request)
     {
-        $logs = AccessLog::all();
+        $logs = AccessLog::select('*');
+        if ($site_id = $request->get('site_id')) {
+            $logs->where('site_id', $site_id);
+        }
+        if ($start_time = $request->get('start_time')) {
+            $logs->where('created_at', '>=', strtotime($start_time));
+        }
+        if ($end_time = $request->get('end_time')) {
+            $logs->where('created_at', '<=', strtotime($end_time . ' 24:00:00'));
+        }
+        $logs = $logs->get();
+
         $count = [
             'mobileCount'=>0,
             'tabletCount'=>0,
@@ -95,11 +106,24 @@ class ClientAnalyseController extends Controller
 
     /**
      * 按照软件区别统计
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function software()
+    public function software(Request $request)
     {
+        $logs = AccessLog::select('*');
+        if ($site_id = $request->get('site_id')) {
+            $logs->where('site_id', $site_id);
+        }
+        if ($start_time = $request->get('start_time')) {
+            $logs->where('created_at', '>=', strtotime($start_time));
+        }
+        if ($end_time = $request->get('end_time')) {
+            $logs->where('created_at', '<=', strtotime($end_time . ' 24:00:00'));
+        }
+        $logs = $logs->get();
+
         $oses = $browsers = [];
-        $logs = AccessLog::all();
         foreach ($logs as $log) {
             $oses[$log->getOS()][] = $log;
             $browsers[$log->getBrowser()][] = $log;
@@ -107,6 +131,41 @@ class ClientAnalyseController extends Controller
         return view('admin.clientanalyse.software', [
             'oses'=> $oses,
             'browsers'=> $browsers
+        ]);
+    }
+
+    public function addr(Request $request)
+    {
+        $logs = AccessLog::select('*');
+        if ($site_id = $request->get('site_id')) {
+            $logs->where('site_id', $site_id);
+        }
+        if ($start_time = $request->get('start_time')) {
+            $logs->where('created_at', '>=', strtotime($start_time));
+        }
+        if ($end_time = $request->get('end_time')) {
+            $logs->where('created_at', '<=', strtotime($end_time . ' 24:00:00'));
+        }
+        $logs = $logs->get();
+
+        $continents = $countries = $provinces = $cities = [];
+
+        foreach ($logs as $log) {
+            $continents[$log->getContinent()][] = $log;
+            $countries[$log->getCountry()][] = $log;
+            $provinces[$log->getProvince()][] = $log;
+            if ($ct = $log->getCity()) {
+                $cities[$ct][] = $log;
+            } else {
+                $cities['未知'][] = $log;
+            }
+        }
+
+        return view('admin.clientanalyse.addr', [
+            'continents'=>$continents,
+            'countries'=>$countries,
+            'provinces'=>$provinces,
+            'cities'=>$cities
         ]);
     }
 }

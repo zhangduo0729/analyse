@@ -56,18 +56,24 @@ class SitePolicy
      */
     public function update(User $user, Site $site)
     {
-        //
+        if ($site->user_id === $user->id) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Determine whether the user can delete the site.
-     *
+     * 确定用户是否拥有删除站点的权限
      * @param  \App\User  $user
      * @param  \App\Site  $site
      * @return mixed
      */
     public function delete(User $user, Site $site)
     {
+        if ($site->user_id === $user->id) {
+            return true;
+        }
         return false;
     }
 }
