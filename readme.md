@@ -1,4 +1,3 @@
-# 安装方法
-```bash
-php artian app:install
-```
+# composer
+- composer install
+- php artisan app:install
